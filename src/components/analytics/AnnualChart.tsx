@@ -18,9 +18,11 @@ const data = [
 export default function AnnualChart() {
   return (
     <div className="rounded-2xl bg-white/5 p-6">
-      <h2 className="text-lg font-semibold mb-4">Annual Growth</h2>
+  <h2 className="text-lg font-semibold mb-4">
+    Annual Growth
+  </h2>
 
-      <div className="h-[360px]">
+  <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <XAxis dataKey="year" stroke="#94a3b8" />

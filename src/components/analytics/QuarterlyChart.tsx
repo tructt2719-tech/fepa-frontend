@@ -17,12 +17,13 @@ const data = [
 
 export default function QuarterlyChart() {
   return (
-    <div className="rounded-2xl bg-white/5 p-6">
-      <h2 className="text-lg font-semibold mb-4">
-        Quarterly Performance
-      </h2>
+   <div className="rounded-2xl bg-white/5 p-6">
+  <h2 className="text-lg font-semibold mb-4">
+    Quarterly Performance
+  </h2>
 
-      <div className="h-[360px]">
+  <div style={{ width: "100%", height: 320 }}>
+    
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
             <XAxis dataKey="quarter" stroke="#94a3b8" />
@@ -49,5 +50,6 @@ export default function QuarterlyChart() {
         </ResponsiveContainer>
       </div>
     </div>
+    
   );
 }

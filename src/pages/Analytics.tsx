@@ -1,29 +1,38 @@
 import { useState } from "react";
 
-/* IMPORT CHART COMPONENTS */
+/* TAB COMPONENT */
+import AnalyticsTabs from "../components/analytics/AnalyticsTabs";
+
+/* CHART COMPONENTS */
 import DailyChart from "../components/analytics/DailyChart";
 import WeeklyChart from "../components/analytics/WeeklyChart";
 import MonthlyChart from "../components/analytics/MonthlyChart";
 import QuarterlyChart from "../components/analytics/QuarterlyChart";
 import AnnualChart from "../components/analytics/AnnualChart";
 
-const TABS = ["Daily", "Weekly", "Monthly", "Quarterly", "Annual"] as const;
-type TabType = typeof TABS[number];
+type AnalyticsTab =
+  | "daily"
+  | "weekly"
+  | "monthly"
+  | "quarterly"
+  | "annual";
 
+  
 export default function Analytics() {
-  const [range, setRange] = useState<TabType>("Monthly");
+  const [activeTab, setActiveTab] =
+    useState<AnalyticsTab>("weekly");
 
   const renderChart = () => {
-    switch (range) {
-      case "Daily":
+    switch (activeTab) {
+      case "daily":
         return <DailyChart />;
-      case "Weekly":
+      case "weekly":
         return <WeeklyChart />;
-      case "Monthly":
+      case "monthly":
         return <MonthlyChart />;
-      case "Quarterly":
+      case "quarterly":
         return <QuarterlyChart />;
-      case "Annual":
+      case "annual":
         return <AnnualChart />;
       default:
         return null;
@@ -31,28 +40,25 @@ export default function Analytics() {
   };
 
   return (
-    <div className="page analytics-page">
+    <div className="p-8 space-y-8 text-white">
       {/* HEADER */}
-      <div className="analytics-header">
-        <h1>Financial Analytics</h1>
-        <p>Detailed insights into your spending patterns</p>
+      <div>
+        <h1 className="text-3xl font-bold">
+          Financial Analytics
+        </h1>
+        <p className="text-white/60">
+          Detailed insights into your spending patterns
+        </p>
       </div>
 
       {/* TABS */}
-      <div className="analytics-tabs">
-        {TABS.map((tab) => (
-          <button
-            key={tab}
-            className={range === tab ? "active" : ""}
-            onClick={() => setRange(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
+      <AnalyticsTabs
+        activeTab={activeTab}
+        onChange={setActiveTab}
+      />
 
-      {/* CONTENT */}
-      <div className="analytics-content">{renderChart()}</div>
+      {/* CHART */}
+      {renderChart()}
     </div>
   );
 }

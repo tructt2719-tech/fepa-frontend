@@ -5,7 +5,7 @@ const menus = [
   { label: "Expenses", path: "/expenses" },
   { label: "Budgets", path: "/budgets" },
   { label: "Debts", path: "/debts" },
-  { label: "Settings", path: "/settings" },
+  { label: "Blog", path: "/blog" },
 ];
 
 export default function Sidebar() {

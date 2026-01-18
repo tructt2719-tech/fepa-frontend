@@ -29,7 +29,7 @@ export default function Topbar() {
           <NavLink to="/expenses">Expenses</NavLink>
           <NavLink to="/budgets">Budgets</NavLink>
           <NavLink to="/debts">Debts</NavLink>
-          <NavLink to="/settings">Settings</NavLink>
+          <NavLink to="/blog">Blog</NavLink>
           <NavLink to="/analytics" className="nav-item">
           Analytics
 </NavLink>

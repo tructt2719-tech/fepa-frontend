@@ -20,27 +20,20 @@ export default function AnalyticsTabs({ activeTab, onChange }: Props) {
   ];
 
   return (
-    <div className="inline-flex rounded-full bg-white/5 p-1">
-      {tabs.map((tab) => {
-        const isActive = activeTab === tab.key;
+  <div className="analytics-tabs">
+    {tabs.map((tab) => {
+      const isActive = activeTab === tab.key;
 
-        return (
-          <button
-            key={tab.key}
-            onClick={() => onChange(tab.key)}
-            className={`
-              px-4 py-2 rounded-full text-sm font-medium transition
-              ${
-                isActive
-                  ? "bg-white/10 text-white shadow"
-                  : "text-white/60 hover:text-white"
-              }
-            `}
-          >
-            {tab.label}
-          </button>
-        );
-      })}
-    </div>
-  );
+      return (
+        <button
+          key={tab.key}
+          onClick={() => onChange(tab.key)}
+          className={isActive ? "active" : ""}
+        >
+          {tab.label}
+        </button>
+      );
+    })}
+  </div>
+);
 }

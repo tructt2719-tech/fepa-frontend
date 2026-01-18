@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Expenses from "./pages/Expenses";
 import Budgets from "./pages/Budgets";
 import Debts from "./pages/Debts";
-import Settings from "./pages/Settings";
+import Blog from "./pages/Blog";
 import Analytics from "./pages/Analytics";
 
 export default function App() {
@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/budgets" element={<Budgets />} />
         <Route path="/debts" element={<Debts />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/blog" element={<Blog />} />
   
       </Route>
     </Routes>
