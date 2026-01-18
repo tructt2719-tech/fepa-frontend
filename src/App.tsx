@@ -18,7 +18,7 @@ export default function App() {
         <Route path="/budgets" element={<Budgets />} />
         <Route path="/debts" element={<Debts />} />
         <Route path="/blog" element={<Blog />} />
-  
+        <Route path="/profile" element={<Profile />} />
       </Route>
     </Routes>
   );
