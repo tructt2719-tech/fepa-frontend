@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   Search,
@@ -9,45 +9,52 @@ import {
 } from "lucide-react";
 
 export default function Topbar() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const navigate = useNavigate();
+
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    return (localStorage.getItem("fepa-theme") as "light" | "dark") || "dark";
+  });
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("fepa-theme", theme);
   }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === "dark" ? "light" : "dark"));
+  };
+
+  const goToProfile = () => {
+    navigate("/profile");
+  };
 
   return (
     <header className="topbar">
-      {/* LEFT */}
       <div className="topbar-left">
         <div className="logo">
           <div className="logo-circle">F</div>
           FEPA
         </div>
-
         <nav className="top-nav">
           <NavLink to="/" end>Dashboard</NavLink>
           <NavLink to="/expenses">Expenses</NavLink>
           <NavLink to="/budgets">Budgets</NavLink>
           <NavLink to="/debts">Debts</NavLink>
           <NavLink to="/blog">Blog</NavLink>
-          <NavLink to="/analytics" className="nav-item">
-          Analytics
-</NavLink>
-
+          <NavLink to="/analytics">Analytics</NavLink>
         </nav>
       </div>
 
-      {/* RIGHT */}
       <div className="topbar-right">
         <div className="search-box">
           <Search size={16} />
           <input placeholder="Search..." />
         </div>
 
-        {/* THEME TOGGLE */}
+        {/* Nút chuyển đổi theme */}
         <button
           className="icon-btn"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={toggleTheme}
         >
           {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
         </button>
@@ -61,7 +68,7 @@ export default function Topbar() {
           className="avatar" 
           onClick={goToProfile}
           style={{ cursor: "pointer" }}
-          title="Trang cá nhân"  // tooltip khi hover
+          title="Trang cá nhân"
         >
           <User size={18} />
         </div>
@@ -69,4 +76,3 @@ export default function Topbar() {
     </header>
   );
 }
-
