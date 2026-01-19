@@ -57,10 +57,16 @@ export default function Topbar() {
           <span className="dot" />
         </button>
 
-        <div className="avatar">
+        <div 
+          className="avatar" 
+          onClick={goToProfile}
+          style={{ cursor: "pointer" }}
+          title="Trang cá nhân"  // tooltip khi hover
+        >
           <User size={18} />
         </div>
       </div>
     </header>
   );
 }
+
