@@ -1,13 +1,316 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>fepa-frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>fepa-frontend</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #2c003e, #1a0026);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #fff;
+    }
+
+    .login-container {
+        background: #1e0030;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 350px;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(45deg, #c400d6, #ff0080);
+        border-radius: 15px;
+        margin: 0 auto 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .logo svg {
+        width: 30px;
+        height: 30px;
+        fill: #fff;
+    }
+    h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    p.welcome {
+        font-size: 14px;
+        color: #a0a0a0;
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .input-wrapper {
+        position: relative;
+    }
+    .input-wrapper input {
+        width: 100%;
+        padding: 12px 12px 12px 40px;
+        background: #2c003e;
+        border: 1px solid #3a0052;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+    .input-wrapper input:focus {
+        outline: none;
+        border-color: #c400d6;
+    }
+    .input-icon {
+        position: absolute;
+        top: 50%;
+        left: 12px;
+        transform: translateY(-50%);
+        color: #a0a0a0;
+    }
+    .input-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .sign-in-btn {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(45deg, #9b00e8, #ff0080);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 0.3s;
+        margin-top: 10px;
+    }
+    .sign-in-btn:hover {
+        background: linear-gradient(45deg, #b800ff, #ff00a0);
+    }
+    .sign-in-btn svg {
+        margin-left: 8px;
+        width: 18px;
+        height: 18px;
+        fill: #fff;
+    }
+
+    .signup-link {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #a0a0a0;
+    }
+    .signup-link a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .signup-link a:hover {
+        text-decoration: underline;
+    }
+    
+    .forgot-link {
+        display: block;
+        margin-top: 10px;
+        color: #a0a0a0; 
+        font-size: 12px; 
+        text-decoration: none;
+        text-align: right;
+    }
+</style> 
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 18v1a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v1h-2v-1a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1h2zm-1-4a2 2 0 1 1 0 4 2 2 0 0 1 0-4zm-1 2a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3-8h2V4h-2v4z"/></svg>
+    </div>
+
+    <div id="login-section">
+        <h1>FEPA</h1>
+        <p class="welcome">Welcome back</p>
+
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 3h18a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm17 4.238l-7.928 7.1L4 7.216V19h16V7.238zM4.511 5l7.55 6.762L19.489 5H4.511z"/></svg>
+                    </span>
+                    <input type="email" id="email" name="email" placeholder="your@gmail.com" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a5 5 0 0 1 5 5v4h1a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-8a3 3 0 0 1 3-3h1V7a5 5 0 0 1 5-5zm5 9H7v8h10v-8zm-5-7a3 3 0 0 0-3 3v4h6V7a3 3 0 0 0-3-3z"/></svg>
+                    </span>
+                    <input type="password" id="password" name="password" placeholder="........" required>
+                </div>
+            </div>
+            
+            <a href="#" id="forgot-pw-link" class="forgot-link">Forgot password?</a>
+
+            <button type="submit" class="sign-in-btn">
+                Sign In
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2h12.172z"/></svg>
+            </button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an account? <a href="#" id="go-to-signup">Sign up</a>
+        </div>
+    </div>
+
+    <div id="signup-section" style="display: none;">
+        <h1>Create Account</h1>
+        <p class="welcome">Join FEPA today</p>
+        <form>
+            <div class="form-group">
+                <label>Email Address</label>
+                <div class="input-wrapper">
+                    <input type="email" placeholder="Enter your email" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="input-wrapper">
+                    <input type="password" placeholder="Create password" required>
+                </div>
+            </div>
+             <div class="form-group">
+                <label>Confirm Password</label>
+                <div class="input-wrapper">
+                    <input type="password" placeholder="Confirm password" required>
+                </div>
+            </div>
+            <button type="submit" class="sign-in-btn">Sign Up</button>
+        </form>
+        <div class="signup-link">
+            Already have an account? <a href="#" id="back-to-login-from-signup">Sign In</a>
+        </div>
+    </div>
+
+    <div id="forgot-pw-section" style="display: none;">
+        <h1 style="font-size: 20px;">Reset Password</h1>
+        <p class="welcome">Enter email to receive code</p>
+        
+        <div class="form-group">
+            <div class="input-wrapper">
+                <input type="email" id="reset-email" placeholder="Enter your email">
+            </div>
+        </div>
+        
+        <div id="otp-group" style="display: none;" class="form-group">
+            <label>Verification Code</label>
+            <div class="input-wrapper">
+                <input type="text" id="otp-code" placeholder="Enter 123456">
+            </div>
+        </div>
+
+        <button type="button" id="send-otp-btn" class="sign-in-btn">Send Code</button>
+        <button type="button" id="verify-btn" style="display: none;" class="sign-in-btn">Verify & Reset</button>
+        
+        <div class="signup-link">
+            <a href="#" id="back-to-login">Back to Login</a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+ 
+    const loginSection = document.getElementById('login-section');
+    const signupSection = document.getElementById('signup-section');
+    const forgotSection = document.getElementById('forgot-pw-section');
+
+    const goToSignupBtn = document.getElementById('go-to-signup');
+    const forgotPwLink = document.getElementById('forgot-pw-link');
+    const backToLoginBtn = document.getElementById('back-to-login');
+    const backFromSignupBtn = document.getElementById('back-to-login-from-signup');
+
+    const sendOtpBtn = document.getElementById('send-otp-btn');
+    const verifyBtn = document.getElementById('verify-btn');
+    const otpGroup = document.getElementById('otp-group');
+
+    goToSignupBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginSection.style.display = 'none';
+        signupSection.style.display = 'block';
+        forgotSection.style.display = 'none';
+    });
+
+    backFromSignupBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        signupSection.style.display = 'none';
+        loginSection.style.display = 'block';
+    });
+
+    forgotPwLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginSection.style.display = 'none';
+        forgotSection.style.display = 'block';
+    });
+
+    backToLoginBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        forgotSection.style.display = 'none';
+        loginSection.style.display = 'block';
+    });
+
+    sendOtpBtn.addEventListener('click', () => {
+        const email = document.getElementById('reset-email').value;
+        if (!email) {
+            alert("Vui lòng nhập Email!");
+            return;
+        }
+
+        sendOtpBtn.innerText = "Sending...";
+
+        setTimeout(() => {
+            alert("Đã gửi mã OTP đến: " + email + "\n(Mã dùng thử là: 123456)");
+            sendOtpBtn.style.display = 'none';
+            otpGroup.style.display = 'block';
+            verifyBtn.style.display = 'flex';
+        }, 1500);
+    });
+
+    verifyBtn.addEventListener('click', () => {
+        const code = document.getElementById('otp-code').value;
+        if (code === "123456") {
+            alert("Thành công! Mật khẩu đã được đặt lại.");
+            location.reload(); 
+        } else {
+            alert("Mã OTP sai! Vui lòng nhập 123456.");
+        }
+    });
+</script>
+
+</body>
 </html>
