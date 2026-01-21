@@ -1,18 +1,16 @@
 import ExpenseItem from "./ExpenseItem";
-import type { Expense } from "../data/mockExpenses";
+import type { Expense } from "../types/expense";
 
 interface Props {
   expenses: Expense[];
 }
 
-const ExpenseList = ({ expenses }: Props) => {
+export default function ExpenseList({ expenses }: Props) {
   return (
-    <div className="expense-list">
-      {expenses.map((expense) => (
-        <ExpenseItem key={expense.id} expense={expense} />
+    <div>
+      {expenses.map((e) => (
+        <ExpenseItem key={e.id} expense={e} />
       ))}
     </div>
   );
-};
-
-export default ExpenseList;
+}

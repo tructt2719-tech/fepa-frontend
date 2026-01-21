@@ -1,7 +1,10 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { loadData, saveData } from "../database/storage";
+import type { Budget } from "../types/budget";
 import "../styles/layout.css";
 import "../styles/budget.css";
+
+import type { SavingsGoal } from "../types/savingsGoal";
 
 import BudgetCard from "../components/budgets/BudgetCard";
 import SavingsGoalCard from "../components/budgets/SavingsGoalCard";
@@ -14,8 +17,20 @@ import { budgets, goals } from "../data/mockBudgets";
 
 export default function Budgets() {
   // ===== STATE =====
-  const [budgetList, setBudgetList] = useState(budgets);
-  const [goalList, setGoalList] = useState(goals);
+  const [budgetList, setBudgetList] = useState<Budget[]>(() =>
+    loadData("budgets", budgets),
+  );
+  const [goalList, setGoalList] = useState<SavingsGoal[]>(() =>
+    loadData("goals", goals),
+  );
+
+  useEffect(() => {
+    saveData("budgets", budgetList);
+  }, [budgetList]);
+
+  useEffect(() => {
+    saveData("goals", goalList);
+  }, [goalList]);
 
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [showGoalModal, setShowGoalModal] = useState(false);
@@ -72,9 +87,7 @@ export default function Budgets() {
       {showBudgetModal && (
         <CreateBudgetModal
           onClose={() => setShowBudgetModal(false)}
-          onCreate={(newBudget) =>
-            setBudgetList([...budgetList, newBudget])
-          }
+          onCreate={(newBudget) => setBudgetList([...budgetList, newBudget])}
         />
       )}
 

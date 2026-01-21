@@ -8,7 +8,7 @@ export interface Expense {
   time: string;
 }
 
-export const mockExpenses: Expense[] = [
+export const expenses: Expense[] = [
   {
     id: 1,
     title: "Starbucks Coffee",

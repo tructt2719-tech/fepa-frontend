@@ -17,13 +17,10 @@ const data = [
 
 export default function QuarterlyChart() {
   return (
-   <div className="rounded-2xl bg-white/5 p-6">
-  <h2 className="text-lg font-semibold mb-4">
-    Quarterly Performance
-  </h2>
+    <div className="rounded-2xl bg-white/5 p-6">
+      <h2 className="text-lg font-semibold mb-4">Quarterly Performance</h2>
 
-  <div style={{ width: "100%", height: 320 }}>
-    
+      <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
             <XAxis dataKey="quarter" stroke="#94a3b8" />
@@ -36,20 +33,11 @@ export default function QuarterlyChart() {
               }}
             />
             <Legend />
-            <Bar
-              dataKey="income"
-              fill="#10b981"
-              radius={[8, 8, 0, 0]}
-            />
-            <Bar
-              dataKey="expenses"
-              fill="#ec4899"
-              radius={[8, 8, 0, 0]}
-            />
+            <Bar dataKey="income" fill="#10b981" radius={[8, 8, 0, 0]} />
+            <Bar dataKey="expenses" fill="#ec4899" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
     </div>
-    
   );
 }

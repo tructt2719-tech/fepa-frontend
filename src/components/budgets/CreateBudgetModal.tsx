@@ -42,6 +42,7 @@ export default function CreateBudgetModal({ onClose, onCreate }: Props) {
         <label>Monthly Limit</label>
         <input
           type="number"
+          min={0}
           placeholder="0.00"
           value={limit}
           onChange={(e) => setLimit(e.target.value)}

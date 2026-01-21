@@ -1,10 +1,4 @@
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 const data = [
   { name: "Food", value: 1200, color: "#8b5cf6" },
@@ -56,10 +50,7 @@ export default function DonutChart() {
       <div className="donut-legend">
         {data.map((item) => (
           <div key={item.name} className="legend-item">
-            <span
-              className="dot"
-              style={{ background: item.color }}
-            />
+            <span className="dot" style={{ background: item.color }} />
             <span>{item.name}</span>
             <span className="amount">${item.value}</span>
           </div>

@@ -41,6 +41,7 @@ export default function CreateGoalModal({ onClose, onCreate }: Props) {
         <label>Target Amount</label>
         <input
           type="number"
+          min={0}
           value={target}
           onChange={(e) => setTarget(e.target.value)}
         />
@@ -48,12 +49,17 @@ export default function CreateGoalModal({ onClose, onCreate }: Props) {
         <label>Current Amount</label>
         <input
           type="number"
+          min={0}
           value={current}
           onChange={(e) => setCurrent(e.target.value)}
         />
 
         <label>Target Date</label>
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
 
         <button className="btn-primary" onClick={handleSubmit}>
           Create Goal

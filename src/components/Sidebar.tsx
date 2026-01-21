@@ -17,9 +17,7 @@ export default function Sidebar() {
         <NavLink
           key={m.path}
           to={m.path}
-          className={({ isActive }) =>
-            isActive ? "menu active" : "menu"
-          }
+          className={({ isActive }) => (isActive ? "menu active" : "menu")}
         >
           {m.label}
         </NavLink>

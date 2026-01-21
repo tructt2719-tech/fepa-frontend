@@ -1,6 +1,10 @@
 import { useState } from "react";
+import type { Expense } from "../../types/expense";
 
-export default function ManualExpenseForm() {
+interface Props {
+  onAdd: (expense: Expense) => void;
+}
+export default function ManualExpenseForm({ onAdd }: Props) {
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [date, setDate] = useState("");
@@ -9,13 +13,36 @@ export default function ManualExpenseForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log({
-      amount,
+    // console.log({
+    //   amount,
+    //   category,
+    //   date,
+    //   note,
+    // });
+    const numericAmount = Number(amount);
+
+    if (!category || !date) return;
+
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      alert("Amount must be greater than 0");
+      return;
+    }
+
+    onAdd({
+      id: Date.now(),
+      name: category, // UI đang không có name riêng
       category,
+      amount: numericAmount,
       date,
       note,
+      icon: "🍔",
     });
 
+    // reset form (optional)
+    setAmount("");
+    setCategory("");
+    setDate("");
+    setNote("");
     // Sau này backend thì POST API tại đây
   };
 
@@ -26,6 +53,7 @@ export default function ManualExpenseForm() {
         <label>Amount</label>
         <input
           type="number"
+          min={0}
           placeholder="0.00"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
@@ -35,10 +63,7 @@ export default function ManualExpenseForm() {
       {/* CATEGORY */}
       <div className="form-group">
         <label>Category</label>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
+        <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">Select category</option>
           <option>Food & Dining</option>
           <option>Transportation</option>

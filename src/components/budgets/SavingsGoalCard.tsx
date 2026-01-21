@@ -1,4 +1,5 @@
 type Goal = {
+  id: number;
   name: string;
   icon: string;
   current: number;
@@ -25,10 +26,7 @@ export default function SavingsGoalCard({ data }: { data: Goal }) {
       </div>
 
       <div className="progress-bar">
-        <div
-          className="progress"
-          style={{ width: `${percent}%` }}
-        />
+        <div className="progress" style={{ width: `${percent}%` }} />
       </div>
 
       <div className="goal-footer">

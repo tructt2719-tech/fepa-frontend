@@ -17,7 +17,9 @@ export default function AddDebtModal({ onClose, onAdd }: Props) {
     nextPayment: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -63,22 +65,32 @@ export default function AddDebtModal({ onClose, onAdd }: Props) {
         <div className="grid-2">
           <div className="form-group">
             <label>Total Amount</label>
-            <input name="total" type="number" onChange={handleChange} />
+            <input name="total" type="number" min={0} onChange={handleChange} />
           </div>
 
           <div className="form-group">
             <label>Paid Amount</label>
-            <input name="paid" type="number" onChange={handleChange} />
+            <input name="paid" type="number" min={0} onChange={handleChange} />
           </div>
 
           <div className="form-group">
             <label>Monthly Payment</label>
-            <input name="monthly" type="number" onChange={handleChange} />
+            <input
+              name="monthly"
+              type="number"
+              min={0}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label>Interest Rate (%)</label>
-            <input name="interest" type="number" onChange={handleChange} />
+            <input
+              name="interest"
+              type="number"
+              min={0}
+              onChange={handleChange}
+            />
           </div>
         </div>
 

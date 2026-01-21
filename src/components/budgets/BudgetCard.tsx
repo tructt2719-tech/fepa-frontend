@@ -1,4 +1,5 @@
 type Budget = {
+  id: number;
   name: string;
   icon: string;
   spent: number;
@@ -29,9 +30,7 @@ export default function BudgetCard({ data }: { data: Budget }) {
       </div>
 
       <div className="budget-footer">
-        <span className={over ? "danger-text" : ""}>
-          {percent}% used
-        </span>
+        <span className={over ? "danger-text" : ""}>{percent}% used</span>
         <span>${data.limit - data.spent} remaining</span>
       </div>
 

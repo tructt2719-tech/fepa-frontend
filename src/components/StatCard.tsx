@@ -1,9 +1,4 @@
-import {
-  Wallet,
-  TrendingDown,
-  Target,
-  CreditCard,
-} from "lucide-react";
+import { Wallet, TrendingDown, Target, CreditCard } from "lucide-react";
 
 /* ICON MAP */
 export const icons = {
@@ -57,13 +52,9 @@ export default function StatCard({
         {note && <span className="note">{note}</span>}
       </div>
 
-      <p className={`title ${highlight ? "text-light" : ""}`}>
-        {title}
-      </p>
+      <p className={`title ${highlight ? "text-light" : ""}`}>{title}</p>
 
-      <h2 className={`value ${highlight ? "text-light" : ""}`}>
-        {value}
-      </h2>
+      <h2 className={`value ${highlight ? "text-light" : ""}`}>{value}</h2>
     </div>
   );
 }

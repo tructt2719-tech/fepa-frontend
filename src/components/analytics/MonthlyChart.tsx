@@ -10,7 +10,6 @@ import {
   CartesianGrid,
 } from "recharts";
 
-
 /* DATA */
 const overviewData = [
   { month: "Jul", income: 4500, expenses: 3200, savings: 1300 },
@@ -35,31 +34,33 @@ export default function MonthlyChart() {
     <>
       {/* MONTHLY OVERVIEW */}
       <div className="analytics-card">
-  <div className="analytics-card-header">
-    <h3>Monthly Overview</h3>
-    <span className="positive">↗ Savings rate: 24%</span>
-  </div>
+        <div className="analytics-card-header">
+          <h3>Monthly Overview</h3>
+          <span className="positive">↗ Savings rate: 24%</span>
+        </div>
 
-  {/* LEGEND */}
-  <div className="chart-legend">
-    <span className="income">● Income</span>
-    <span className="expenses">● Expenses</span>
-    <span className="savings">● Savings</span>
-  </div>
+        {/* LEGEND */}
+        <div className="chart-legend">
+          <span className="income">● Income</span>
+          <span className="expenses">● Expenses</span>
+          <span className="savings">● Savings</span>
+        </div>
 
-  <ResponsiveContainer width="100%" height={320}>
-    <LineChart data={overviewData}>
-      <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
-      <XAxis dataKey="month" />
-      <YAxis />
-      <Tooltip />
-      <Line dataKey="income" stroke="#10b981" strokeWidth={2} />
-      <Line dataKey="expenses" stroke="#ec4899" strokeWidth={2} />
-      <Line dataKey="savings" stroke="#8b5cf6" strokeWidth={2} />
-    </LineChart>
-  </ResponsiveContainer>
-</div>
-
+        <ResponsiveContainer width="100%" height={320}>
+          <LineChart data={overviewData}>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="rgba(148,163,184,0.2)"
+            />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Line dataKey="income" stroke="#10b981" strokeWidth={2} />
+            <Line dataKey="expenses" stroke="#ec4899" strokeWidth={2} />
+            <Line dataKey="savings" stroke="#8b5cf6" strokeWidth={2} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
 
       {/* CATEGORY TRENDS */}
       <div className="analytics-card">
@@ -67,7 +68,10 @@ export default function MonthlyChart() {
 
         <ResponsiveContainer width="100%" height={320}>
           <AreaChart data={categoryData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.2)" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="rgba(148,163,184,0.2)"
+            />
             <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />

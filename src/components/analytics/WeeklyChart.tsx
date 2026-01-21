@@ -17,19 +17,13 @@ const data = [
 export default function WeeklyChart() {
   return (
     <div className="rounded-2xl bg-white/5 p-6">
-  <div className="flex justify-between mb-4">
-    <h2 className="text-lg font-semibold">
-      Weekly Expenses - This Month
-    </h2>
-    <span className="text-sm text-white/60">
-      January 2026
-    </span>
-  </div>
+      <div className="flex justify-between mb-4">
+        <h2 className="text-lg font-semibold">Weekly Expenses - This Month</h2>
+        <span className="text-sm text-white/60">January 2026</span>
+      </div>
 
-  {/* 👇 DIV CÓ HEIGHT */}
-  <div style={{ width: "100%", height: 320 }}>
-
-   
+      {/* 👇 DIV CÓ HEIGHT */}
+      <div style={{ width: "100%", height: 320 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data}>
             <XAxis dataKey="week" stroke="#94a3b8" />
@@ -42,11 +36,7 @@ export default function WeeklyChart() {
                 border: "none",
               }}
             />
-            <Bar
-              dataKey="expenses"
-              fill="#ec4899"
-              radius={[8, 8, 0, 0]}
-            />
+            <Bar dataKey="expenses" fill="#ec4899" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

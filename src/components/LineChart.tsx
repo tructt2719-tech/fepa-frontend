@@ -33,7 +33,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
     payload.reduce((acc: any, item: any) => {
       acc[item.dataKey] = item;
       return acc;
-    }, {})
+    }, {}),
   );
 
   return (
@@ -47,9 +47,7 @@ function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
         fontSize: 14,
       }}
     >
-      <strong style={{ display: "block", marginBottom: 6 }}>
-        {label}
-      </strong>
+      <strong style={{ display: "block", marginBottom: 6 }}>{label}</strong>
 
       {uniqueItems.map((item: any) => (
         <div key={item.dataKey}>
@@ -78,10 +76,7 @@ export default function IncomeExpenseChart({ data }: Props) {
         </defs>
 
         {/* ===== GRID ===== */}
-        <CartesianGrid
-          strokeDasharray="3 3"
-          stroke="var(--chart-grid)"
-        />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid)" />
 
         {/* ===== AXIS ===== */}
         <XAxis
@@ -97,7 +92,6 @@ export default function IncomeExpenseChart({ data }: Props) {
 
         {/* ===== TOOLTIP ===== */}
         <Tooltip content={<CustomTooltip />} />
-
 
         {/* ===== AREA (ĐỘ PHỦ MÀU) ===== */}
         <Area

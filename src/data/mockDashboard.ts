@@ -49,4 +49,3 @@ export const lineChartData = [
   { month: "May", income: 5000, expense: 3800 },
   { month: "Jun", income: 5500, expense: 4300 },
 ];
-

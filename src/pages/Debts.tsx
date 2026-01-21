@@ -1,7 +1,8 @@
 import "../styles/layout.css";
 import "../styles/debts.css";
-
-import { useState } from "react";
+import { loadData, saveData } from "../database/storage";
+import type { Debt } from "../types/debt";
+import { useState, useEffect } from "react";
 
 import DebtSummaryCard from "../components/debts/DebtSummaryCard";
 import DebtItemCard from "../components/debts/DebtItemCard";
@@ -12,33 +13,37 @@ import { debtSummary, debts as initialDebts } from "../data/mockDebts";
 
 export default function Debts() {
   const [showAddModal, setShowAddModal] = useState(false);
-  const [debtList, setDebtList] = useState(initialDebts);
+  // const [debtList, setDebtList] = useState(initialDebts);
+  const [debtList, setDebtList] = useState<Debt[]>(() =>
+    loadData("debts", initialDebts),
+  );
 
+  useEffect(() => {
+    //
+    saveData("debts", debtList); //
+  }, [debtList]); //
   const handleAddDebt = (newDebt: any) => {
-  setDebtList([
-    ...debtList,
-    {
-      id: Date.now(),
-      name: newDebt.name,
-      type: newDebt.type,
-      total: newDebt.total,
-      paid: newDebt.paid,
-      monthly: newDebt.monthly,    
-      interest: newDebt.interest,    
-      nextPayment: newDebt.nextPayment,
-      payoff: "—",
-      overdue: false,
-    },
-  ]);
-};
-
+    setDebtList([
+      ...debtList,
+      {
+        id: Date.now(),
+        name: newDebt.name,
+        type: newDebt.type,
+        total: newDebt.total,
+        paid: newDebt.paid,
+        monthly: newDebt.monthly,
+        interest: newDebt.interest,
+        nextPayment: newDebt.nextPayment,
+        payoff: "—",
+        overdue: false,
+      },
+    ]);
+  };
 
   return (
     <div className="page">
       <h1>Debt Tracking</h1>
-      <p className="page-desc">
-        Manage and monitor your debts effectively
-      </p>
+      <p className="page-desc">Manage and monitor your debts effectively</p>
 
       {/* SUMMARY */}
       <div className="grid-3">
@@ -51,18 +56,12 @@ export default function Debts() {
           title="Monthly Payment"
           value={`$${debtSummary.monthlyPayment}`}
         />
-        <DebtSummaryCard
-          title="Active Debts"
-          value={debtSummary.activeDebts}
-        />
+        <DebtSummaryCard title="Active Debts" value={debtSummary.activeDebts} />
       </div>
 
       {/* ADD BUTTON */}
       <div className="align-right mt-20">
-        <button
-          className="btn-primary"
-          onClick={() => setShowAddModal(true)}
-        >
+        <button className="btn-primary" onClick={() => setShowAddModal(true)}>
           + Add Debt
         </button>
       </div>

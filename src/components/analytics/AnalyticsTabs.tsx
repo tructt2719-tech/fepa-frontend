@@ -1,9 +1,4 @@
-type AnalyticsTab =
-  | "daily"
-  | "weekly"
-  | "monthly"
-  | "quarterly"
-  | "annual";
+type AnalyticsTab = "daily" | "weekly" | "monthly" | "quarterly" | "annual";
 
 interface Props {
   activeTab: AnalyticsTab;
@@ -20,20 +15,20 @@ export default function AnalyticsTabs({ activeTab, onChange }: Props) {
   ];
 
   return (
-  <div className="analytics-tabs">
-    {tabs.map((tab) => {
-      const isActive = activeTab === tab.key;
+    <div className="analytics-tabs">
+      {tabs.map((tab) => {
+        const isActive = activeTab === tab.key;
 
-      return (
-        <button
-          key={tab.key}
-          onClick={() => onChange(tab.key)}
-          className={isActive ? "active" : ""}
-        >
-          {tab.label}
-        </button>
-      );
-    })}
-  </div>
-);
+        return (
+          <button
+            key={tab.key}
+            onClick={() => onChange(tab.key)}
+            className={isActive ? "active" : ""}
+          >
+            {tab.label}
+          </button>
+        );
+      })}
+    </div>
+  );
 }

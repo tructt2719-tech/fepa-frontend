@@ -9,7 +9,7 @@ export default function Dashboard() {
       {/* STAT CARDS */}
       <div className="stat-grid">
         {stats.map((s, i) => (
-        <StatCard
+          <StatCard
             key={i}
             title={s.title}
             value={s.value}
@@ -17,9 +17,8 @@ export default function Dashboard() {
             highlight={s.highlight}
             iconColor={s.iconColor}
             iconBg={s.iconBg}
-        />
+          />
         ))}
-
       </div>
 
       {/* CHARTS */}

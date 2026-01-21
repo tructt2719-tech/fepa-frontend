@@ -10,17 +10,10 @@ import MonthlyChart from "../components/analytics/MonthlyChart";
 import QuarterlyChart from "../components/analytics/QuarterlyChart";
 import AnnualChart from "../components/analytics/AnnualChart";
 
-type AnalyticsTab =
-  | "daily"
-  | "weekly"
-  | "monthly"
-  | "quarterly"
-  | "annual";
+type AnalyticsTab = "daily" | "weekly" | "monthly" | "quarterly" | "annual";
 
-  
 export default function Analytics() {
-  const [activeTab, setActiveTab] =
-    useState<AnalyticsTab>("weekly");
+  const [activeTab, setActiveTab] = useState<AnalyticsTab>("weekly");
 
   const renderChart = () => {
     switch (activeTab) {
@@ -43,19 +36,14 @@ export default function Analytics() {
     <div className="p-8 space-y-8 text-white">
       {/* HEADER */}
       <div>
-        <h1 className="text-3xl font-bold">
-          Financial Analytics
-        </h1>
+        <h1 className="text-3xl font-bold">Financial Analytics</h1>
         <p className="text-white/60">
           Detailed insights into your spending patterns
         </p>
       </div>
 
       {/* TABS */}
-      <AnalyticsTabs
-        activeTab={activeTab}
-        onChange={setActiveTab}
-      />
+      <AnalyticsTabs activeTab={activeTab} onChange={setActiveTab} />
 
       {/* CHART */}
       {renderChart()}
