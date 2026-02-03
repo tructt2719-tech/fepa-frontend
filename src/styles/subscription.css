@@ -1,0 +1,213 @@
+/* subscription-modal.css - Full refactor chỉ thêm dark/light linh hoạt */
+
+/* =============================================
+   VARIABLES (đồng bộ với các file khác, fallback giữ nguyên dark gốc)
+============================================= */
+:root {
+  /* LIGHT MODE fallback */
+  --bg-overlay:     rgba(0, 0, 0, 0.65);
+  --bg-modal:       #ffffff;
+  --bg-card:        #f8fafc;
+  --bg-feature:     #f1f5f9;
+  --bg-surface:     #f1f5f9;
+
+  --text-main:      #0f172a;
+  --text-secondary: #475569;
+  --text-muted:     #64748b;
+
+  --border:         #e2e8f0;
+
+  --primary:        #8b5cf6;
+  --gradient-brand: linear-gradient(135deg, #8b5cf6, #ec4899);
+  --gradient-btn:   linear-gradient(90deg, #a855f7, #ec4899);
+
+  --premium-gradient: linear-gradient(160deg, #f3e8ff, #faf5ff);
+  --badge-bg:       #e2e8f0;
+  --badge-hot:      linear-gradient(135deg, #8b5cf6, #ec4899);
+}
+
+body.dark,
+[data-theme="dark"] {
+  /* DARK MODE - giữ gần giống gốc */
+  --bg-overlay:     rgba(2, 6, 23, 0.75);
+  --bg-modal:       radial-gradient(circle at top, #1e293b, #020617);
+  --bg-card:        #0f172a;
+  --bg-feature:     #0f172a;
+  --bg-surface:     #020617;
+
+  --text-main:      white;
+  --text-secondary: #cbd5e1;
+  --text-muted:     #94a3b8;
+
+  --border:         #1e293b;
+
+  --primary:        #a855f7;
+  --gradient-brand: linear-gradient(135deg, #a855f7, #ec4899);
+  --gradient-btn:   linear-gradient(90deg, #c084fc, #f472b6);
+
+  --premium-gradient: linear-gradient(160deg, #5b1b6f, #2b0f3a);
+  --badge-bg:       #1e293b;
+  --badge-hot:      linear-gradient(135deg, #a855f7, #ec4899);
+}
+
+/* =============================================
+   OVERLAY & MODAL
+============================================= */
+.sub-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sub-modal {
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--bg-modal);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  color: var(--text-main);
+}
+
+/* Close */
+.sub-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* Header */
+.sub-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.sub-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--gradient-brand);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.sub-header h1 {
+  font-size: 32px;
+  color: var(--text-main);
+  margin: 0 0 8px;
+}
+
+.sub-header p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Plans */
+.sub-plans {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* Plan card */
+.plan-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.plan-card.premium {
+  background: var(--premium-gradient);
+  border-color: var(--primary);
+}
+
+.plan-head {
+  display: flex;
+  align-items: center;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: var(--badge-bg);
+  color: var(--text-muted);
+}
+
+.badge.hot {
+  background: var(--badge-hot);
+  color: white;
+}
+
+.price {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 16px 0;
+  color: var(--text-main);
+}
+
+.price span {
+  font-size: 16px;
+  color: var(--text-muted);
+}
+
+.desc {
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn.disabled {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.btn.primary {
+  background: var(--gradient-btn);
+  color: white;
+  font-weight: bold;
+}
+
+/* Features */
+.sub-features {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.feature {
+  background: var(--bg-feature);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  color: var(--text-main);
+}
