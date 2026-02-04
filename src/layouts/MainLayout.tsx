@@ -78,7 +78,7 @@ const MainLayout = () => {
         throw new Error();
       }
     } catch (error) {
-      setMessages((prev) => [...prev, { role: "bot", text: "⚠️ Rất tiếc, hệ thống AI đang bận. Vui lòng thử lại sau giây lát!" }]);
+      setMessages((prev) => [...prev, { role: "bot", text: "⚠️ Api key bạn đã bị ban do leak ra bên ngoài" }]);
     } finally {
       setIsLoading(false);
     }
