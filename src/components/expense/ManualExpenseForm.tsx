@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import type { Expense } from "../../types/expense";
+import { useExpenses } from "../../context/ExpenseContext";
 
 interface Props {
   onAdd: (expense: Expense) => void;
@@ -29,6 +30,7 @@ export default function ManualExpenseForm({
   currentUserId,
   initialData,
 }: Props) {
+  const { dispatch } = useExpenses();
   const [amount, setAmount] = useState(initialData?.amount?.toString() || "");
   const [category, setCategory] = useState(initialData?.category || "Shopping");
   const [date, setDate] = useState(
@@ -104,6 +106,20 @@ export default function ManualExpenseForm({
         note: note.trim() || undefined,
         icon: finalIcon,
         createdAt: new Date().toISOString(),
+      });
+
+      dispatch({
+        type: "ADD_EXPENSE",
+        payload: {
+        id: data.id,
+        userID: userIdNumber,
+        amount: numericAmount,
+        category,
+        date,
+        note: note.trim() || undefined,
+        icon: finalIcon,
+        createdAt: new Date().toISOString(),
+        },
       });
 
       setAmount("");

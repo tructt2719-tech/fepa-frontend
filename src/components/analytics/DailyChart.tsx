@@ -1,3 +1,5 @@
+import { useExpenses } from "../../context/ExpenseContext";
+import { useMemo } from "react";
 import {
   BarChart,
   Bar,
@@ -8,30 +10,30 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const data = [
-  { day: "Mon", value: 80 },
-  { day: "Tue", value: 50 },
-  { day: "Wed", value: 70 },
-  { day: "Thu", value: 190 },
-  { day: "Fri", value: 110 },
-  { day: "Sat", value: 200 },
-  { day: "Sun", value: 250 },
-];
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 export default function DailyChart() {
-  return (
-    <div className="analytics-card">
-      <h3>Daily Expenses - This Week</h3>
+  const { state } = useExpenses();
 
-      <ResponsiveContainer width="100%" height={320}>
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="day" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="value" fill="#8b5cf6" radius={[6, 6, 0, 0]} />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+  const data = useMemo(() => {
+    const map = Object.fromEntries(days.map(d => [d, 0]));
+
+    state.expenses.forEach(e => {
+      const d = days[new Date(e.date).getDay()];
+      map[d] += e.amount;
+    });
+
+    return days.map(d => ({ day: d, value: map[d] }));
+  }, [state.expenses]);
+
+  return (
+    <ResponsiveContainer width="100%" height={320}>
+      <BarChart data={data}>
+        <XAxis dataKey="day" />
+        <YAxis />
+        <Tooltip />
+        <Bar dataKey="value" fill="#8b5cf6" radius={[6,6,0,0]} />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }
