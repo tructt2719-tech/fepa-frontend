@@ -264,68 +264,97 @@ const verifyBiometricFace = async (stream: MediaStream) => {
 };
     // ── OTP VERIFY ──────────────────────────────────────────────────────────
 const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const inputCode = code.trim();
-    if (inputCode.length < 6) {
-      Swal.fire({ icon: 'warning', title: 'Thiếu mã', text: 'Vui lòng nhập đủ 6 số.' });
-      return;
-    }
+  const inputCode = code.trim();
+  
+  // 1. Kiểm tra định dạng cơ bản
+  if (inputCode.length < 6) {
+    Swal.fire({ icon: 'warning', title: 'Thiếu mã', text: 'Vui lòng nhập đủ 6 số.' });
+    return;
+  }
 
-    try {
-      // Lấy thông tin người dùng đang chờ đăng ký từ localStorage
-      const pendingUserStr = localStorage.getItem("pending_user");
-      const pendingUser = pendingUserStr ? JSON.parse(pendingUserStr) : null;
+  // 2. Lấy dữ liệu từ localStorage
+  const savedOtp = localStorage.getItem("otp_code");
+  const expiry = localStorage.getItem("otp_expiry");
+  const pendingUserStr = localStorage.getItem("pending_user");
 
-      const response = await fetch(`http://localhost:8000/api/verify-login-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: verifyEmail,
-          code: inputCode,
-          password: pendingUser?.password, // Quan trọng: Gửi kèm để backend lưu DB
-          phone: pendingUser?.phone,
-          id: pendingUser?.id
-        }),
+  // 3. Logic kiểm tra mã OTP (Quan trọng nhất)
+  if (!savedOtp || inputCode !== savedOtp) {
+    Swal.fire({ 
+      icon: 'error', 
+      title: 'Xác thực thất bại', 
+      text: 'Mã OTP không chính xác. Vui lòng kiểm tra lại email.' 
+    });
+    return; 
+  }
+
+  // 4. Kiểm tra hết hạn mã
+  if (expiry && Date.now() > parseInt(expiry)) {
+    Swal.fire({ 
+      icon: 'error', 
+      title: 'Hết hạn', 
+      text: 'Mã OTP đã hết hiệu lực. Vui lòng đăng ký lại.' 
+    });
+    navigate("/register");
+    return;
+  }
+
+  try {
+    const pendingUser = pendingUserStr ? JSON.parse(pendingUserStr) : null;
+
+    // Chỉ khi mã khớp, chúng ta mới gửi dữ liệu lên Backend để tạo User
+    const response = await fetch(`http://localhost:8000/api/verify-login-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: verifyEmail,
+        code: inputCode,
+        password: pendingUser?.password,
+        phone: pendingUser?.phone,
+        id: pendingUser?.id
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Thiết lập thiết bị tin cậy nếu có chọn
+      if (trustDevice) {
+        const trustExpiry = Date.now() + 24 * 60 * 60 * 1000;
+        localStorage.setItem(`fepa_trust_${verifyEmail}`, trustExpiry.toString());
+      }
+
+      // Lưu thông tin đăng nhập thành công
+      localStorage.setItem("access_token", result.access_token);
+      localStorage.setItem("user", JSON.stringify(result.user));
+
+      // Dọn dẹp sạch sẽ bộ nhớ tạm
+      localStorage.removeItem("otp_code");
+      localStorage.removeItem("otp_expiry");
+      localStorage.removeItem("pending_user");
+      localStorage.removeItem("pending_email");
+
+      Swal.fire({ 
+        icon: 'success', 
+        title: 'Xác thực thành công', 
+        timer: 1500, 
+        showConfirmButton: false 
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
-        if (trustDevice) {
-          const expiry = Date.now() + 24 * 60 * 60 * 1000;
-          localStorage.setItem(`fepa_trust_${verifyEmail}`, expiry.toString());
-        }
-
-        localStorage.setItem("access_token", result.access_token);
-        localStorage.setItem("user", JSON.stringify(result.user));
-
-        // Dọn dẹp bộ nhớ tạm sau khi đăng ký thành công
-        localStorage.removeItem("otp_code");
-        localStorage.removeItem("otp_expiry");
-        localStorage.removeItem("pending_user");
-        localStorage.removeItem("pending_email");
-
-        Swal.fire({ 
-          icon: 'success', 
-          title: 'Xác thực thành công', 
-          timer: 1500, 
-          showConfirmButton: false 
-        });
-
-        navigate("/dashboard", { replace: true });
-      } else {
-        Swal.fire({ 
-          icon: 'error', 
-          title: 'Xác thực thất bại', 
-          text: result.detail || "Mã OTP không chính xác hoặc đã hết hạn." 
-        });
-      }
-    } catch (err) {
-      console.error("OTP Error:", err);
-      Swal.fire({ icon: 'error', title: 'Lỗi kết nối', text: 'Không thể kết nối tới máy chủ.' });
+      navigate("/dashboard", { replace: true });
+    } else {
+      Swal.fire({ 
+        icon: 'error', 
+        title: 'Lỗi hệ thống', 
+        text: result.detail || "Không thể hoàn tất đăng ký." 
+      });
     }
-  };
+  } catch (err) {
+    console.error("OTP Error:", err);
+    Swal.fire({ icon: 'error', title: 'Lỗi kết nối', text: 'Không thể kết nối tới máy chủ.' });
+  }
+};
 
     const resetScan = () => {
       if (cameraStream) {
