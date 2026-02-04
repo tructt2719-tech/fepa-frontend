@@ -10,7 +10,7 @@ import traceback
 router = APIRouter(prefix="/api", tags=["AI Chat"])
 
 # ----- GEMINI CLIENT -----
-GEMINI_API_KEY = "AIzaSyBGVwQ6hgBtsMwGRJPTSbw3Q13U-4PeUhY"
+GEMINI_API_KEY = "AIzaSyAjt_S2DQPp-UC-5aBjYBLadQESODBtC9A"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
