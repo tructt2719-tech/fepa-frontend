@@ -76,37 +76,58 @@ def verify_biometric_distance(stored_str: str, received_str: str) -> bool:
 @router.post("/api/login")
 async def login(data: LoginRequest):
     conn = get_db_connection()
+
     user = conn.execute(
-        "SELECT * FROM User WHERE email = ? AND password = ?", 
-        (data.email, data.password)
+        "SELECT * FROM User WHERE email = ?",
+        (data.email,)
     ).fetchone()
-    conn.close()
 
-    if not user:
-        raise HTTPException(status_code=401, detail="Sai tài khoản hoặc mật khẩu")
+    # Không tồn tại user hoặc sai mật khẩu
+    if not user or user["password"] != data.password:
+        conn.close()
+        raise HTTPException(
+            status_code=401,
+            detail="Sai tài khoản hoặc mật khẩu"
+        )
 
-    # Kiểm tra trạng thái 2FA từ cột mới (giả sử cột tên 'two_factor_method' với giá trị 'none', 'otp', 'biometric')
-    two_factor_method = user["two_factor_method"] or 'none'
+    #  User bị khóa
+    if user["isActive"] == 0:
+        conn.close()
+        raise HTTPException(
+            status_code=403,
+            detail="ACCOUNT_LOCKED"
+        )
 
-    # Trường hợp bật 2FA OTP
-    if two_factor_method == 'otp':
+    # Lấy trạng thái 2FA
+    two_factor_method = user["two_factor_method"] or "none"
+
+    # 2FA OTP
+    if two_factor_method == "otp":
+        conn.close()
         return {
             "need_2fa": True,
             "method": "otp",
             "email": user["email"]
         }
 
-    # Trường hợp bật Biometric
-    if two_factor_method == 'biometric':
+    # 2FA Biometric
+    if two_factor_method == "biometric":
+        conn.close()
         return {
             "need_2fa": True,
             "method": "biometric",
             "email": user["email"]
         }
 
-    # Đăng nhập thẳng (none)
+    # Login thường
     token = create_token(user["email"])
-    return {"need_2fa": False, "access_token": token, "user": dict(user)}
+    conn.close()
+    return {
+        "need_2fa": False,
+        "access_token": token,
+        "user": dict(user)
+    }
+
 
 @router.post("/api/verify-login-otp")
 async def verify_login_otp(data: FullRegisterRequest):
@@ -197,6 +218,12 @@ async def register_biometric_key(data: BiometricKeyRequest):
         cursor = conn.cursor()
         
         user = cursor.execute("SELECT * FROM User WHERE email = ?", (data.email,)).fetchone()
+        if user["isActive"] == 0:
+            conn.close()
+            raise HTTPException(
+                status_code=403,
+                detail="ACCOUNT_LOCKED"
+            )
         if not user:
             print("[REGISTER-BIOMETRIC] User không tồn tại")
             raise HTTPException(404, "User not found")
@@ -349,3 +376,45 @@ async def check_email(email: str):
         raise HTTPException(status_code=400, detail="Email này đã được đăng ký!")
     
     return {"status": "available"}
+
+class UpdateUserStatusRequest(BaseModel):
+    user_id: int
+    isActive: int  # 0 hoặc 1
+
+@router.put("/api/admin/users/status")
+async def update_user_status(data: UpdateUserStatusRequest):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "UPDATE User SET isActive = ? WHERE id = ?",
+        (data.isActive, data.user_id)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return {"message": "User status updated"}
+
+@router.get("/api/admin/users")
+async def get_all_users():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    users = cursor.execute("""
+        SELECT id, email, role, isActive
+        FROM User
+    """).fetchall()
+
+    conn.close()
+
+    return [
+        {
+            "id": u["id"],
+            "email": u["email"],
+            "role": u["role"] or "user",
+            "active": bool(u["isActive"])
+        }
+        for u in users
+    ]
+

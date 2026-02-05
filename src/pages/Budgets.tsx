@@ -23,14 +23,18 @@ export default function Budgets() {
   // HÀM FETCH DỮ LIỆU CHUNG
   const fetchData = useCallback(async () => {
     try {
-      const budgetRes = await fetch(`http://127.0.0.1:8000/api/budgets/${currentUserId}`);
+      const budgetRes = await fetch(
+        `http://127.0.0.1:8000/api/budgets/${currentUserId}`,
+      );
       if (budgetRes.ok) {
         const data = await budgetRes.json();
         setBudgetList(data);
       }
 
       // Giả sử có endpoint goals
-      const goalRes = await fetch(`http://127.0.0.1:8000/api/goals/${currentUserId}`);
+      const goalRes = await fetch(
+        `http://127.0.0.1:8000/api/goals/${currentUserId}`,
+      );
       if (goalRes.ok) {
         const data = await goalRes.json();
         setGoalList(data);
@@ -68,23 +72,32 @@ export default function Budgets() {
   return (
     <div className="page">
       <h1>Budgets & Savings Goals</h1>
-      <p className="page-desc">Track your spending limits and achieve your financial goals</p>
+      <p className="page-desc">
+        Track your spending limits and achieve your financial goals
+      </p>
 
       {/* MONTHLY BUDGETS */}
       <section>
         <div className="section-header">
           <h2>Active Budgets</h2>
-          <button className="btn-primary" onClick={() => setShowBudgetModal(true)}>+ Add Budget</button>
+          <button
+            className="btn-primary"
+            onClick={() => setShowBudgetModal(true)}
+          >
+            + Add Budget
+          </button>
         </div>
 
         {budgetList.length === 0 ? (
-          <div className="empty-state" style={{ color: 'var(--text-muted)' }}>Bạn chưa thiết lập ngân sách nào.</div>
+          <div className="empty-state" style={{ color: "var(--text-muted)" }}>
+            You haven't set a budget yet.
+          </div>
         ) : (
           <div className="grid-2">
             {budgetList.map((b) => (
-              <BudgetCard 
-                key={b.id} 
-                data={b} 
+              <BudgetCard
+                key={b.id}
+                data={b}
                 onUpdate={fetchData} // ĐÃ ĐỔI TỪ onDelete THÀNH onUpdate
               />
             ))}
@@ -96,15 +109,22 @@ export default function Budgets() {
       <section>
         <div className="section-header">
           <h2>Savings Goals</h2>
-          <button className="btn-primary" onClick={() => setShowGoalModal(true)}>+ Add Goal</button>
+          <button
+            className="btn-primary"
+            onClick={() => setShowGoalModal(true)}
+          >
+            + Add Goal
+          </button>
         </div>
 
         {goalList.length === 0 ? (
-           <div className="empty-state" style={{ color: 'var(--text-muted)' }}>Chưa có mục tiêu tiết kiệm.</div>
+          <div className="empty-state" style={{ color: "var(--text-muted)" }}>
+            No savings goals have been set yet.
+          </div>
         ) : (
           <div className="grid-3">
             {goalList.map((g) => (
-              <SavingsGoalCard key={g.id} data={g} onUpdate={fetchData}/>
+              <SavingsGoalCard key={g.id} data={g} onUpdate={fetchData} />
             ))}
           </div>
         )}

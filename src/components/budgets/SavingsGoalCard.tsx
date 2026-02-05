@@ -20,74 +20,90 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
 
   // 1. Tính toán
   const actualSaved = (data.currentAmount || 0) - (data.totalSpent || 0);
-  const percent = data.targetAmount > 0 ? Math.max(0, Math.round((actualSaved / data.targetAmount) * 100)) : 0;
+  const percent =
+    data.targetAmount > 0
+      ? Math.max(0, Math.round((actualSaved / data.targetAmount) * 100))
+      : 0;
 
   const today = new Date();
   const targetDate = new Date(data.deadline);
   const isOverdue = today > targetDate;
   const isSuccess = actualSaved >= data.targetAmount;
-  const statusColor = (isOverdue && !isSuccess) ? "#ef4444" : "#10b981";
+  const statusColor = isOverdue && !isSuccess ? "#ef4444" : "#10b981";
 
   const diffTime = targetDate.getTime() - today.getTime();
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
   // 2. Xử lý xóa với modal đẹp
   const handleDelete = () => {
-    toast((t) => (
-      <div style={{ textAlign: "center", padding: "12px 20px" }}>
-        <p style={{ margin: "0 0 16px", fontSize: "1.1rem", fontWeight: 600 }}>
-          Xóa mục tiêu "{data.goal_name}"?
-        </p>
-        <p style={{ margin: "0 0 20px", color: "#94a3b8", fontSize: "0.95rem" }}>
-          Hành động này không thể hoàn tác.
-        </p>
-        <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
-          <button
-            onClick={() => toast.dismiss(t.id)}
+    toast(
+      (t) => (
+        <div style={{ textAlign: "center", padding: "12px 20px" }}>
+          <p
+            style={{ margin: "0 0 16px", fontSize: "1.1rem", fontWeight: 600 }}
+          >
+            Xóa mục tiêu "{data.goal_name}"?
+          </p>
+          <p
             style={{
-              padding: "10px 20px",
-              background: "#334155",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              minWidth: "80px",
+              margin: "0 0 20px",
+              color: "#94a3b8",
+              fontSize: "0.95rem",
             }}
           >
-            Hủy
-          </button>
-          <button
-            onClick={async () => {
-              toast.dismiss(t.id);
-              await confirmDelete();
-            }}
-            style={{
-              padding: "10px 20px",
-              background: "#ef4444",
-              color: "white",
-              border: "none",
-              borderRadius: "6px",
-              cursor: "pointer",
-              minWidth: "80px",
-              fontWeight: 600,
-            }}
+            Hành động này không thể hoàn tác.
+          </p>
+          <div
+            style={{ display: "flex", gap: "12px", justifyContent: "center" }}
           >
-            Xóa
-          </button>
+            <button
+              onClick={() => toast.dismiss(t.id)}
+              style={{
+                padding: "10px 20px",
+                background: "#334155",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                minWidth: "80px",
+              }}
+            >
+              Hủy
+            </button>
+            <button
+              onClick={async () => {
+                toast.dismiss(t.id);
+                await confirmDelete();
+              }}
+              style={{
+                padding: "10px 20px",
+                background: "#ef4444",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                minWidth: "80px",
+                fontWeight: 600,
+              }}
+            >
+              Xóa
+            </button>
+          </div>
         </div>
-      </div>
-    ), {
-      duration: Infinity, // Không tự đóng
-      position: "top-center",
-      style: {
-        background: "#1e293b",
-        color: "white",
-        borderRadius: "12px",
-        border: "1px solid #334155",
-        padding: "0",
-        maxWidth: "360px",
+      ),
+      {
+        duration: Infinity, // Không tự đóng
+        position: "top-center",
+        style: {
+          background: "#1e293b",
+          color: "white",
+          borderRadius: "12px",
+          border: "1px solid #334155",
+          padding: "0",
+          maxWidth: "360px",
+        },
       },
-    });
+    );
   };
 
   const confirmDelete = async () => {
@@ -97,9 +113,12 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
     const toastId = toast.loading("Đang xóa mục tiêu...");
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/goals/${data.id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/goals/${data.id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (response.ok) {
         toast.success("Đã xóa mục tiêu thành công!", { id: toastId });
@@ -110,7 +129,9 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
       }
     } catch (err: any) {
       console.error("Lỗi xóa:", err);
-      toast.error(err.message || "Không thể xóa mục tiêu. Vui lòng thử lại.", { id: toastId });
+      toast.error(err.message || "Không thể xóa mục tiêu. Vui lòng thử lại.", {
+        id: toastId,
+      });
     } finally {
       setIsDeleting(false);
     }
@@ -129,7 +150,13 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
     >
       <div className="goal-header">
         <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <h4 style={{ margin: 0, fontSize: "1.1rem" }}>{data.goal_name}</h4>
             <button
               onClick={handleDelete}
@@ -147,7 +174,13 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
               ✕
             </button>
           </div>
-          <p style={{ color: isOverdue ? "#ef4444" : "#94a3b8", fontSize: "0.8rem", margin: "4px 0" }}>
+          <p
+            style={{
+              color: isOverdue ? "#ef4444" : "#94a3b8",
+              fontSize: "0.8rem",
+              margin: "4px 0",
+            }}
+          >
             {isOverdue
               ? "⚠️ Quá hạn mục tiêu"
               : `⏰ Còn ${diffDays > 0 ? diffDays : 0} ngày (Hạn: ${data.deadline})`}
@@ -157,15 +190,28 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
 
       <div className="goal-values" style={{ marginTop: "15px" }}>
         <div style={{ fontSize: "0.9rem" }}>
-          Saved: <b style={{ color: statusColor }}>${actualSaved.toLocaleString()}</b>
-          <span style={{ fontSize: "0.75rem", color: "#94a3b8", marginLeft: "5px" }}>
+          Saved:{" "}
+          <b style={{ color: statusColor }}>${actualSaved.toLocaleString()}</b>
+          <span
+            style={{ fontSize: "0.75rem", color: "#94a3b8", marginLeft: "5px" }}
+          >
             (Gốc: ${data.currentAmount} - Chi: ${data.totalSpent})
           </span>
         </div>
-        <div style={{ fontSize: "0.8rem", color: "#94a3b8" }}>Target: ${data.targetAmount.toLocaleString()}</div>
+        <div style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
+          Target: ${data.targetAmount.toLocaleString()}
+        </div>
       </div>
 
-      <div className="progress-bar" style={{ height: "8px", backgroundColor: "#334155", borderRadius: "4px", margin: "12px 0" }}>
+      <div
+        className="progress-bar"
+        style={{
+          height: "8px",
+          backgroundColor: "#334155",
+          borderRadius: "4px",
+          margin: "12px 0",
+        }}
+      >
         <div
           className="progress"
           style={{
@@ -179,7 +225,14 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
         />
       </div>
 
-      <div className="goal-footer" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div
+        className="goal-footer"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <span
           style={{
             color: statusColor,
@@ -193,7 +246,9 @@ export default function SavingsGoalCard({ data, onUpdate }: Props) {
           {percent}% {isSuccess ? "Hoàn thành" : ""}
         </span>
         <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
-          {isSuccess ? "✨ Xuất sắc!" : `Còn thiếu: $${Math.max(0, data.targetAmount - actualSaved).toLocaleString()}`}
+          {isSuccess
+            ? "✨ Xuất sắc!"
+            : `Còn thiếu: $${Math.max(0, data.targetAmount - actualSaved).toLocaleString()}`}
         </span>
       </div>
     </div>

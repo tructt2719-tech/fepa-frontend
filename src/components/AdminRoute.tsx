@@ -7,13 +7,10 @@ const AdminRoute = () => {
     return <Navigate to="/" replace />;
   }
 
-  try {
-    const user = JSON.parse(userStr);
-    if (user.role !== "admin") {
-      return <Navigate to="/dashboard" replace />;
-    }
-  } catch {
-    return <Navigate to="/" replace />;
+  const user = JSON.parse(userStr);
+
+  if (user.role !== "ADMIN") {
+    return <Navigate to="/dashboard" replace />;
   }
 
   return <Outlet />;

@@ -1,29 +1,35 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 import "../styles/auth.css";
 import Loading from "../components/Loading";
 
 const Login = () => {
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+
+        if (user.role === "ADMIN") {
+          navigate("/admin/users", { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      } catch {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      }
+    }
+  }, []);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
-    if (email === "admin@gmail.com" && password === "123") {
-      const user = {
-        email,
-        role: "admin",
-      };
-
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("token", "admin-token");
-
-      navigate("/admin");
-      return;
-    }
     e.preventDefault();
     setLoading(true);
     e.preventDefault();
@@ -75,7 +81,12 @@ const Login = () => {
                   showConfirmButton: false,
                 });
 
-                navigate("/dashboard");
+                if (vData.user.role === "ADMIN") {
+                  navigate("/admin/users");
+                } else {
+                  navigate("/dashboard");
+                }
+
                 return;
               }
             } catch (err) {
@@ -140,8 +151,25 @@ const Login = () => {
           timer: 1500,
           showConfirmButton: false,
         });
-        setTimeout(() => navigate("/dashboard"), 1500);
+        const role = result.user.role;
+
+        setTimeout(() => {
+          if (role === "ADMIN") {
+            navigate("/admin/users");
+          } else {
+            navigate("/dashboard");
+          }
+        }, 1500);
       } else {
+        if (result.detail === "ACCOUNT_LOCKED") {
+          Swal.fire({
+            icon: "error",
+            title: "Your account has been locked.",
+            text: "Your account has been locked. Please contact the administrator.",
+          });
+          return;
+        }
+
         Swal.fire({
           icon: "error",
           title: "Lỗi",
