@@ -1,0 +1,36 @@
+/* PAGE WRAPPER */
+.analytics-page {
+  width: 100%;
+  color: white;
+}
+
+/* CONTAINER – CHỈNH LỀ 2 BÊN Ở ĐÂY */
+.analytics-container {
+  padding: 16px; /* 👈 thụt lề trái phải */
+}
+
+@media (min-width: 1024px) {
+  .analytics-container {
+    padding: 0 24px; /* desktop thụt hơn chút */
+  }
+}
+
+/* HEADER */
+.analytics-header {
+  margin-bottom: 20px;
+}
+
+.analytics-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.analytics-subtitle {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* CONTENT */
+.analytics-content {
+  width: 100%;
+}

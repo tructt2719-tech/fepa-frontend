@@ -75,14 +75,11 @@ export default function App() {
         </Route>
 
         {/* 👑 ADMIN */}
-        <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
-          <Route path="/admin/subscriptions" element={<AdminSubscriptions />} />
-          <Route
-            path="/admin/subscriptions/create"
-            element={<CreateSubscription />}
-          />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="subscriptions" element={<AdminSubscriptions />} />
+          <Route path="subscriptions/create" element={<CreateSubscription />} />
         </Route>
 
         {/* 404 */}

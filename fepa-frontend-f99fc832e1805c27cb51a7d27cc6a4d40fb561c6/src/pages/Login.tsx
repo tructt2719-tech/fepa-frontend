@@ -1,0 +1,231 @@
+import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import emailjs from "@emailjs/browser";
+import Swal from "sweetalert2";
+import "../styles/auth.css";
+import Loading from "../components/Loading";
+
+const Login = () => {
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+
+        if (user.role === "ADMIN") {
+          navigate("/admin/users", { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      } catch {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      }
+    }
+  }, []);
+
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:8000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        if (result.need_2fa) {
+          const trustKey = `fepa_trust_${result.email}`;
+          const trustExpire = localStorage.getItem(trustKey);
+
+          // --- KIỂM TRA TIN TƯỞNG THIẾT BỊ (CHO CẢ OTP VÀ BIOMETRIC) ---
+          if (trustExpire && Date.now() < parseInt(trustExpire)) {
+            try {
+              // Xác thực ngầm: Gọi verify tương ứng với method
+              let vRes;
+              if (result.method === "otp") {
+                vRes = await fetch(
+                  `http://localhost:8000/api/verify-login-otp?email=${encodeURIComponent(result.email)}&code=123456`,
+                  { method: "POST" },
+                );
+              } else if (result.method === "biometric") {
+                // Đối với biometric, vì trust, ta giả định OK và gọi verify với dummy key (hoặc login thẳng)
+                // Để chính xác, có thể gọi /verify-biometric với key dummy, nhưng đơn giản: gọi verify-login-otp dummy vì backend không check code thật
+                vRes = await fetch(
+                  `http://localhost:8000/api/verify-login-otp?email=${encodeURIComponent(result.email)}&code=123456`,
+                  { method: "POST" },
+                );
+              }
+
+              if (vRes && vRes.ok) {
+                const vData = await vRes.json();
+                localStorage.setItem("token", vData.access_token);
+                localStorage.setItem("user", JSON.stringify(vData.user));
+
+                Swal.fire({
+                  icon: "success",
+                  title: "Nhận diện thiết bị!",
+                  text: "Đang đăng nhập tự động...",
+                  timer: 1000,
+                  showConfirmButton: false,
+                });
+
+                if (vData.user.role === "ADMIN") {
+                  navigate("/admin/users");
+                } else {
+                  navigate("/dashboard");
+                }
+
+                return;
+              }
+            } catch (err) {
+              console.error("Lỗi xác thực ngầm:", err);
+            }
+          }
+
+          // --- NẾU KHÔNG TRUST -> XỬ LÝ THEO METHOD ---
+          if (result.method === "otp") {
+            // Logic OTP cũ
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+            localStorage.setItem("otp_code", otp);
+            localStorage.setItem("pending_email", result.email);
+
+            await emailjs.send(
+              "service_7y26eqp",
+              "template_mcvqowq",
+              {
+                user_email: result.email,
+                to_name: result.email,
+                from_name: "FEPA Security",
+                message: `Mã xác thực đăng nhập FEPA của bạn là: ${otp}`,
+              },
+              "BUHtg1BuVtAPT9O2M",
+            );
+
+            Swal.fire({
+              icon: "info",
+              title: "Xác thực 2FA",
+              text: `Mã OTP đã được gửi tới ${result.email}`,
+              timer: 2000,
+              showConfirmButton: false,
+            });
+
+            navigate("/verify", {
+              state: { email: result.email, method: "otp" },
+            });
+            return;
+          } else if (result.method === "biometric") {
+            // Chuyển sang Verify với method biometric (sẽ mở camera)
+            Swal.fire({
+              icon: "info",
+              title: "Xác thực Sinh trắc học",
+              text: "Chuẩn bị quét khuôn mặt...",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+            navigate("/verify", {
+              state: { email: result.email, method: "biometric" },
+            });
+            return;
+          }
+        }
+
+        // --- ĐĂNG NHẬP THÔNG THƯỜNG (KHÔNG 2FA) ---
+        localStorage.setItem("token", result.access_token);
+        localStorage.setItem("user", JSON.stringify(result.user));
+
+        Swal.fire({
+          icon: "success",
+          title: "Thành công!",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        const role = result.user.role;
+
+        setTimeout(() => {
+          if (role === "ADMIN") {
+            navigate("/admin/users");
+          } else {
+            navigate("/dashboard");
+          }
+        }, 1500);
+      } else {
+        if (result.detail === "ACCOUNT_LOCKED") {
+          Swal.fire({
+            icon: "error",
+            title: "Your account has been locked.",
+            text: "Your account has been locked. Please contact the administrator.",
+          });
+          return;
+        }
+
+        Swal.fire({
+          icon: "error",
+          title: "Lỗi",
+          text: result.detail || "Sai tài khoản hoặc mật khẩu",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Lỗi server",
+        text: "Backend không phản hồi",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="auth-page">
+      {loading && <Loading />}
+      <div className="auth-container">
+        <div className="auth-logo">💳</div>
+        <h1 style={{ color: "white" }}>FEPA</h1>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Sign In →</button>
+        </form>
+        <div className="auth-links">
+          <div>
+            Don’t have an account? <Link to="/register">Sign up</Link>
+          </div>
+          <div style={{ marginTop: "10px" }}>
+            <Link
+              to="/forgot-password"
+              style={{ fontSize: "0.9rem", color: "#aaa" }}
+            >
+              Forgot password?
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Login;

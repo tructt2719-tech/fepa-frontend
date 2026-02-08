@@ -1,0 +1,189 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.debt-modal {
+  width: 520px;
+  background: var(--bg-card);
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.form-group {
+  margin-top: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-main);
+  color: var(--text-primary);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.full {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* LIGHT MODE */
+#root.light .debt-modal {
+  background: #ffffff;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary.full {
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  margin-bottom: 16px; /* 👈 tách dòng ra */
+}
+
+.btn-primary.full:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+/* Soft danger delete button */
+.btn-delete {
+  padding: 8px 14px;
+  border-radius: 12px;
+
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: none;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background: rgba(239, 68, 68, 0.28);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+  transform: translateY(-1px);
+}
+
+.btn-delete:active {
+  transform: scale(0.97);
+}
+.btn-delete {
+  margin-top: 10px;
+}
+/* ===== STATUS PILL ===== */
+.debt-status {
+  --p: 0%;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  color: white;
+  overflow: hidden;
+
+  background: linear-gradient(
+    90deg,
+    rgba(34, 197, 94, 0.9) var(--p),
+    rgba(255, 255, 255, 0.12) var(--p)
+  );
+
+  transition: background 0.6s ease;
+}
+
+/* TEXT & DOT PHẢI NỔI TRÊN NỀN */
+.debt-status > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* DOT */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+/* ===== OVERDUE OVERRIDE ===== */
+.debt-status.overdue {
+  background: linear-gradient(
+    90deg,
+    rgba(239, 68, 68, 0.9) var(--p),
+    rgba(255, 255, 255, 0.12) var(--p)
+  );
+}
+
+/* ===== PAID OFF (100%) ===== */
+.debt-status.paid {
+  --p: 100%;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.7);
+}
+
+.debt-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 6px;
+}
+
+/* percent bên phải */
+.debt-percent {
+  min-width: 42px;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0.9;
+}

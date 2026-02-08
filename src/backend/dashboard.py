@@ -122,3 +122,61 @@ async def get_line_chart_data(user_id: int):
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         conn.close()
+    
+@router.get("/api/admin/subscriptions")
+async def get_admin_subscriptions():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    rows = cursor.execute("""
+        SELECT 
+            u.email,
+            s.type AS plan,
+            s.duration AS endDate
+        FROM User u
+        LEFT JOIN Subscription s ON u.subscriptionID = s.id
+        WHERE s.type = 'premium'
+    """).fetchall()
+
+    conn.close()
+
+    return [
+        {
+            "email": r["email"],
+            "plan": r["plan"],
+            "startDate": None,
+            "endDate": r["endDate"],
+            "status": "ACTIVE"
+        }
+        for r in rows
+        if r["plan"] == "premium"
+    ]
+
+@router.get("/api/admin/subscriptions")
+async def get_admin_subscriptions():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    rows = cursor.execute("""
+        SELECT 
+            u.email,
+            s.type AS plan,
+            s.duration AS endDate
+        FROM User u
+        LEFT JOIN Subscription s ON u.subscriptionID = s.id
+        WHERE s.type = 'premium'
+    """).fetchall()
+
+    conn.close()
+
+    return [
+        {
+            "email": r["email"],
+            "plan": r["plan"],
+            "startDate": None,
+            "endDate": r["endDate"],
+            "status": "ACTIVE"
+        }
+        for r in rows
+        if r["plan"] == "premium"
+    ]

@@ -1,0 +1,177 @@
+/* ============================================
+   ROOT VARIABLES - Dễ chỉnh sửa ở 1 chỗ
+   ============================================ */
+:root {
+  /* DARK MODE (default) */
+  --bg-body: #0f172a;
+  --bg-card: #1e293b;
+  --bg-featured: #111827;
+  --bg-chip: #374151;
+  --bg-chip-hover: #4b5563;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+  --quicktips-gradient: linear-gradient(135deg, #3b0764, #701a75);
+  --tip-card-bg: rgba(255,255,255,0.07);
+}
+
+[data-theme="light"] {
+  /* LIGHT MODE - Tăng độ tương phản rõ rệt */
+  --bg-body: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-featured: #ffffff;
+  --bg-chip: #e2e8f0;
+  --bg-chip-hover: #cbd5e1;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 10px 30px rgba(0,0,0,0.08);
+
+  --quicktips-gradient: linear-gradient(135deg, #f1f5f9, #e0f2fe);
+  --tip-card-bg: #ffffff;
+}
+
+/* ============================================
+   BODY & COMMON
+   ============================================ */
+body {
+  background: var(--bg-body);
+  color: var(--text-primary);
+}
+
+/* ===== CATEGORY TABS ===== */
+.blog-categories {
+  margin: 24px 0 32px;
+}
+
+.chip {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--bg-chip);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.chip:hover {
+  background: var(--bg-chip-hover);
+}
+
+.chip.active,
+.chip.gradient {
+  background: linear-gradient(135deg, #9333ea, #ec4899);
+  color: white;
+  border-color: transparent;
+}
+
+/* ===== FEATURED BLOG ===== */
+.featured-blog {
+  background: var(--bg-featured);
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.featured-content {
+  padding: 40px;
+}
+
+.featured-content h2,
+.featured-content h3 {
+  color: var(--text-primary);
+}
+
+.featured-content p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.featured-content .meta {
+  color: var(--text-muted);
+}
+
+/* ===== BLOG CARD ===== */
+.blog-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.blog-content {
+  padding: 20px;
+}
+
+.blog-content h3 {
+  margin: 0 0 10px;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+
+.blog-content p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.blog-meta {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin: 8px 0 12px;
+}
+
+.link {
+  color: #a78bfa;
+  font-weight: 500;
+}
+
+[data-theme="light"] .link {
+  color: #7c3aed;
+}
+
+/* ===== QUICK TIPS ===== */
+.quick-tips {
+  background: var(--quicktips-gradient);
+  border-radius: 28px;
+  padding: 40px;
+  margin-top: 5%;
+  color: var(--text-primary);
+}
+
+.tip-card {
+  background: var(--tip-card-bg);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.tip-card h4 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.tip-card p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+/* Tag trên ảnh */
+.blog-tag {
+  background: rgba(0,0,0,0.65);
+  color: white;
+}

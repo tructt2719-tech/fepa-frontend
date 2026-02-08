@@ -1,0 +1,301 @@
+/* Định nghĩa biến màu sắc cho 2 chế độ */
+:root {
+  /* LIGHT MODE (Mặc định) */
+  --chat-bg: #ffffff;
+  --chat-window-bg: #f7f9fc;
+  --chat-text: #1f2937;
+  --chat-border: rgba(0, 0, 0, 0.1);
+  --bot-msg-bg: #f3f4f6;
+  --bot-msg-text: #1f2937;
+  --user-msg-bg: linear-gradient(135deg, #0084ff, #00c6ff);
+  --user-msg-text: #ffffff;
+  --input-bg: #ffffff;
+  --footer-bg: #f9fafb;
+}
+
+/* DARK MODE - Kích hoạt khi thẻ body có class .dark */
+body.dark, [data-theme='dark'] {
+  --chat-bg: #0f172a;
+  --chat-window-bg: #0f172a;
+  --chat-text: #f1f5f9;
+  --chat-border: rgba(255, 255, 255, 0.1);
+  --bot-msg-bg: rgba(255, 255, 255, 0.05);
+  --bot-msg-text: #e2e8f0;
+  --user-msg-bg: linear-gradient(135deg, #0061ff, #00a1ff);
+  --user-msg-text: #ffffff;
+  --input-bg: #1e293b;
+  --footer-bg: rgba(0, 0, 0, 0.3);
+}
+
+.chat-wrapper {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 15px;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+/* Nút bong bóng chat chính */
+.chat-bubble-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #facc15, #eab308);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(250, 204, 21, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.chat-bubble-btn:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Cửa sổ Chat */
+.chat-window {
+  width: 350px;
+  height: 500px;
+  background: var(--chat-window-bg);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  position: relative;
+  border: 1px solid var(--chat-border);
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Header */
+.chat-header {
+  padding: 16px 20px;
+  background: var(--chat-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--chat-border);
+  color: #facc15; /* Giữ màu vàng thương hiệu FEPA */
+  font-weight: 600;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--chat-text);
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+/* Body & Messages */
+.chat-body {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.message-row {
+  display: flex;
+  width: 100%;
+}
+
+.user-row { 
+  justify-content: flex-end;
+  padding-left: 20%;
+}
+
+.bot-row { 
+  justify-content: flex-start; 
+  padding-right: 20%;
+}
+
+.msg-bubble {
+  max-width: 100%;
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  transition: all 0.2s;
+}
+
+/* Bot Bubble */
+.msg-bubble.bot {
+  background: var(--bot-msg-bg);
+  color: var(--bot-msg-text);
+  border-radius: 18px 18px 18px 4px;
+  border: 1px solid var(--chat-border);
+}
+
+/* User Bubble (Xanh nước biển) */
+.msg-bubble.user {
+  background: var(--user-msg-bg);
+  color: var(--user-msg-text);
+  border-radius: 18px 18px 4px 18px;
+  box-shadow: 0 2px 8px rgba(0, 132, 255, 0.2);
+}
+
+/* Footer & Input */
+.chat-footer {
+  padding: 15px;
+  background: var(--footer-bg);
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--chat-border);
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: 1px solid var(--chat-border);
+  background: var(--input-bg);
+  color: var(--chat-text);
+  outline: none;
+}
+
+.chat-footer input:focus {
+  border-color: #facc15;
+}
+
+.send-btn {
+  background: #facc15;
+  color: #000;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Viền lấp lánh nhẹ cho chế độ Dark Premium */
+body.dark .chat-window::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(45deg, transparent, rgba(250, 204, 21, 0.3), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* --- Premium Modal Styling --- */
+.premium-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.85); /* Slate 900 với opacity */
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.premium-modal-card {
+  background: #1e293b;
+  width: 90%;
+  max-width: 400px;
+  padding: 40px 30px;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.premium-icon-circle {
+  width: 80px;
+  height: 80px;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+}
+
+.premium-modal-card h2 {
+  color: white;
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+.premium-modal-card p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.premium-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upgrade-action-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.upgrade-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+}
+
+.later-btn {
+  background: transparent;
+  color: #64748b;
+  border: none;
+  padding: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: #475569;
+  cursor: pointer;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
