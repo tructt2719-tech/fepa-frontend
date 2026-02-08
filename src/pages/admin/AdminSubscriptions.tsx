@@ -1,51 +1,70 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+interface Subscription {
+  email: string;
+  plan: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+}
 
 const AdminSubscriptions = () => {
-  const navigate = useNavigate();
-  const plans = [
-    { id: 1, name: "Free", price: 0, duration: "Forever" },
-    { id: 2, name: "Pro", price: 10, duration: "Monthly" },
-  ];
+  console.log("AdminSubscriptions MOUNTED");
+
+  const [subs, setSubs] = useState<Subscription[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/admin/subscriptions")
+      .then((res) => {
+        if (!res.ok) throw new Error("API error");
+        return res.json();
+      })
+      .then((data) => {
+        setSubs(data);
+      })
+      .catch((err) => {
+        console.error("Fetch subscriptions error:", err);
+        setSubs([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <p style={{ color: "white" }}>Loading...</p>;
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h1 style={{ color: "white" }}>Subscriptions</h1>
-        <button
-          style={{
-            padding: "10px 16px",
-            background: "#2563eb",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-          onClick={() => navigate("/admin/subscriptions/create")}
-        >
-          + Create Subscription
-        </button>
-      </div>
+      <h1 style={{ color: "white", marginBottom: 20 }}>Subscriptions</h1>
+
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ textAlign: "left", background: "#1e293b" }}>
-            <th style={{ padding: "12px" }}>Name</th>
-            <th>Price</th>
-            <th>Duration</th>
+        <thead style={{ background: "#1e293b" }}>
+          <tr>
+            <th>Email</th>
+            <th>Plan</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
           </tr>
         </thead>
+
         <tbody>
-          {plans.map((p) => (
-            <tr key={p.id} style={{ borderBottom: "1px solid #334155" }}>
-              <td style={{ padding: "12px" }}>{p.name}</td>
-              <td>${p.price}</td>
-              <td>{p.duration}</td>
+          {subs.map((s, i) => (
+            <tr key={i} style={{ borderBottom: "1px solid #334155" }}>
+              <td>{s.email}</td>
+              <td>{s.plan}</td>
+              <td>
+                {s.startDate ? new Date(s.startDate).toLocaleDateString() : "-"}
+              </td>
+              <td>{new Date(s.endDate).toLocaleDateString()}</td>
+              <td
+                style={{
+                  color: s.status === "ACTIVE" ? "lime" : "red",
+                }}
+              >
+                {s.status}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -53,4 +72,5 @@ const AdminSubscriptions = () => {
     </div>
   );
 };
+
 export default AdminSubscriptions;
